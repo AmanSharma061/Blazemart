@@ -47,19 +47,14 @@ import FileUploader from './FileUploader'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
-// import { eventDefaultValues } from '@/constants'
 import { Check } from 'lucide-react'
 import axios from 'axios'
 import { formSchema } from '../../lib/validator'
-// import { createcategory } from '../../lib/actions/category.actions'
-import connectToDatabase from '../../app/database/connectDb'
+
 import {
   createCategory,
   getCategories
 } from '../../lib/actions/category.actions'
-// import connectToDatabase from '../../app/database'
-// import connectToDatabase from '@/lib/database/connection'
-// import Category from '@/lib/database/models/category.model'
 
 function EventForm () {
   const [categories, setCategories] = useState([])
@@ -86,7 +81,6 @@ function EventForm () {
 
   const handleAddCategory = async () => {
     createCategory({ name: newCategory })
-   
   }
   function onSubmit (values) {
     //clearing the form after submit
@@ -97,12 +91,9 @@ function EventForm () {
     const fetchCategories = async () => {
       getCategories().then(res => {
         setCategories(res)
-      }
-      )
+      })
     }
     fetchCategories()
-
-      
   }, [handleAddCategory])
   return (
     <div className='w-full lg:px-56 py-2 box-border  md:lg-44 sm:px-38'>
