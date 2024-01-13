@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import connectToDatabase from '../../database/connectDb'
+import connectToDatabase from '../../database/connectDb.js'
 import Category from '../../database/models/categoryModel'
 
 export async function POST (request) {
