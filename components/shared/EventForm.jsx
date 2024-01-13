@@ -47,12 +47,11 @@ import FileUploader from './FileUploader'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
-// import { eventDefaultValues } from '@/constants'
+
 import { Check } from 'lucide-react'
 import axios from 'axios'
 import { formSchema } from '../../lib/validator'
-// import { createcategory } from '../../lib/actions/category.actions'
-import connectToDatabase from '../../app/database/connectDb'
+
 import {
   createCategory,
   getCategories
