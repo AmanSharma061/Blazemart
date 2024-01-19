@@ -18,7 +18,7 @@ function Header () {
         <div className='flex items-center md:px-16 lg:pl-32 '>
           <Link href='/'>
             <img
-              src='./logo.png'
+              src='/logo.png'
               alt='Logo'
               className='md:w-30 md:h-10 h-10  mr-4 object-fill'
             />

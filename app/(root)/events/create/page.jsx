@@ -1,11 +1,11 @@
+'use client'
 import React from 'react'
 import { Metadata } from 'next'
 import EventForm from '../../../../components/shared/EventForm'
-export const metadata = {
-  title: 'Blaze Mart | Create-event '
-}
+import { useAuth } from '@clerk/nextjs'
 
 function page () {
+  const { userId } = useAuth()
   return (
     <>
       <div className='w-full h-32 flex items-center justify-center bg-gray-100 '>
@@ -14,7 +14,7 @@ function page () {
         </h1>
       </div>
       <div>
-        <EventForm />
+        <EventForm type={'Create'} userId={userId} />
       </div>
     </>
   )

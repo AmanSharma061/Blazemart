@@ -1,15 +1,18 @@
 'use client'
 import * as z from 'zod'
 import '@uploadthing/react/styles.css'
-
 import { useForm } from 'react-hook-form'
 import { TiAttachmentOutline } from 'react-icons/ti'
 import { MdDateRange } from 'react-icons/md'
+import { ToastContainer, toast } from 'react-toastify'
+
+import 'react-toastify/dist/ReactToastify.css'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Button } from '../ui/button'
 import { FaIndianRupeeSign } from 'react-icons/fa6'
+import { createEvent } from '../../lib/actions/event.actions'
 import {
   Form,
   FormControl,
@@ -39,7 +42,7 @@ import {
   AlertDialogTrigger
 } from '../ui/alert-dialog'
 
-import React, { startTransition, useEffect, useState } from 'react'
+import React, { startTransition, useCallback, useEffect, useState } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { Textarea } from '../ui/textarea'
 import FileUploader from './FileUploader'
@@ -55,14 +58,15 @@ import {
   createCategory,
   getCategories
 } from '../../lib/actions/category.actions'
-
-function EventForm () {
+import { useUploadThing } from '../../lib/uploadthing'
+import { useRouter } from 'next/navigation'
+function EventForm ({ type, userId }) {
   const [categories, setCategories] = useState([])
   const [newCategory, setNewcategory] = useState('')
   const [files, setFiles] = useState([])
 
   const { isSignedIn, user, isLoaded } = useUser()
-
+  const router = useRouter()
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -78,15 +82,50 @@ function EventForm () {
       isfree: false
     }
   })
+  const { startUpload } = useUploadThing('imageUploader')
+  async function onSubmit (values) {
+    let uploadedImageUrl = values.imageUrl
+    if (files.length > 0) {
+      const uploadedImages = await startUpload(files)
 
-  const handleAddCategory = async () => {
+      if (!uploadedImages) {
+   toast.error('Error Uploading , Try Again!', {
+      position: 'top-center',
+      autoClose: 800,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined
+    })
+
+        return 
+      }
+      uploadedImageUrl = uploadedImages[0].url
+    }
+    if (type === 'Create') {
+      try {
+        const newEvent = await createEvent({
+          event: {
+            ...values,
+            imageUrl: uploadedImageUrl
+          },
+          userId,
+          path: '/profile'
+        })
+        form.reset()
+        if (newEvent) {
+          router.push(`/events/${newEvent._id}`)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+  const handleAddCategory = useCallback(async () => {
     createCategory({ name: newCategory })
-  }
-  function onSubmit (values) {
-    //clearing the form after submit
-    form.reset()
-    console.log(values)
-  }
+  }, [newCategory, createCategory])
+
   useEffect(() => {
     const fetchCategories = async () => {
       getCategories().then(res => {
@@ -97,6 +136,7 @@ function EventForm () {
   }, [handleAddCategory])
   return (
     <div className='w-full lg:px-56 py-2 box-border  md:lg-44 sm:px-38'>
+      <ToastContainer />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
