@@ -81,7 +81,7 @@ function page() {
                         <SelectContent>
                             <SelectGroup>
                                 <SelectLabel>Categories</SelectLabel>
-                                {categories.map((category) => (
+                                {categories?.map((category) => (
                                     <SelectItem key={category.id} value={category.name}>
                                         {category.name}
                                     </SelectItem>
