@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import connectToDatabase from '../../database/mongoDb/connectDB'
+import connectToDatabase from '../../database/mongoDb/connectDB.js'
 import Category from '../../database/models/categoryModel'
 
 export async function POST (request) {
