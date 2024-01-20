@@ -12,7 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Button } from '../ui/button'
 import { FaIndianRupeeSign } from 'react-icons/fa6'
-import { createEvent } from '../../lib/actions/event.actions'
+import { createEvent, updateEvent } from '../../lib/actions/event.actions'
 import {
   Form,
   FormControl,
@@ -60,28 +60,35 @@ import {
 } from '../../lib/actions/category.actions'
 import { useUploadThing } from '../../lib/uploadthing'
 import { useRouter } from 'next/navigation'
-function EventForm ({ type, userId }) {
+
+// Main Functional Component
+
+function EventForm ({ type, userId, event, eventId }) {
   const [categories, setCategories] = useState([])
   const [newCategory, setNewcategory] = useState('')
   const [files, setFiles] = useState([])
 
-  const { isSignedIn, user, isLoaded } = useUser()
   const router = useRouter()
+  const initialValues = {
+    title: '',
+    description: '',
+    imageUrl: '',
+    startDateTime: Date.now(),
+    endDateTime: Date.now(),
+    price: '',
+    location: '',
+    url: '',
+    categoryId: '',
+    isFree: false
+  }
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: '',
-      description: '',
-      imageUrl: '',
-      startDateTime: Date.now(),
-      endDateTime: Date.now(),
-      price: '',
-      location: '',
-      url: '',
-      categoryId: '',
-      isfree: false
-    }
+    defaultValues:
+      type === 'Update'
+        ? { ...event }
+        : { ...initialValues, categoryId: categories[0]?._id }
   })
+
   const { startUpload } = useUploadThing('imageUploader')
   async function onSubmit (values) {
     let uploadedImageUrl = values.imageUrl
@@ -89,17 +96,17 @@ function EventForm ({ type, userId }) {
       const uploadedImages = await startUpload(files)
 
       if (!uploadedImages) {
-   toast.error('Error Uploading , Try Again!', {
-      position: 'top-center',
-      autoClose: 800,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined
-    })
+        toast.error('Error Uploading , Try Again!', {
+          position: 'top-center',
+          autoClose: 800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined
+        })
 
-        return 
+        return
       }
       uploadedImageUrl = uploadedImages[0].url
     }
@@ -114,8 +121,46 @@ function EventForm ({ type, userId }) {
           path: '/profile'
         })
         form.reset()
+        toast.success('Event Successfully created !', {
+          position: 'top-center',
+          autoClose: 800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined
+        })
         if (newEvent) {
           router.push(`/events/${newEvent._id}`)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    } else if (type === 'Update') {
+      try {
+        const updatedEvent = await updateEvent({
+          event: {
+            ...values,
+
+            imageUrl: uploadedImageUrl,
+            _id: eventId
+          },
+          userId,
+          path: `/events/${eventId}`
+        })
+        console.log(updatedEvent)
+        form.reset()
+        toast.success('Event Successfully Updated !', {
+          position: 'top-center',
+          autoClose: 800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined
+        })
+        if (updatedEvent) {
+          router.push(`/events/${updatedEvent._id}`)
         }
       } catch (error) {
         console.log(error)
@@ -166,11 +211,12 @@ function EventForm ({ type, userId }) {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Select defaultValue=''>
+                  <Select onValueChange={field.onChange}>
                     <SelectTrigger className='bg-gray-100 rounded-md'>
                       <SelectValue placeholder='Category' />
                     </SelectTrigger>
-                    <SelectContent className=''>
+                    <SelectContent>
+                      {' '}
                       {categories?.length > 0 &&
                         categories?.map(category => (
                           <SelectItem
@@ -178,10 +224,9 @@ function EventForm ({ type, userId }) {
                             value={category._id}
                             className='select-item p-regular-14'
                           >
-                            {category.name}
+                            {category.name}{' '}
                           </SelectItem>
                         ))}
-
                       <AlertDialog>
                         <AlertDialogTrigger className='text-sm px-8 bg-gray-100 w-full py-2 rounded-md'>
                           Add New Category
@@ -413,7 +458,7 @@ function EventForm ({ type, userId }) {
               </>
             ) : (
               'Submit'
-            )}
+            )}{' '}
           </Button>
         </form>
       </Form>

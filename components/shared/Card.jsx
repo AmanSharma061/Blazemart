@@ -1,69 +1,130 @@
-"use client"
-import React from 'react'
+'use client'
 
-function Card() {
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Typography,
+  Tooltip
+} from '@material-tailwind/react'
+import React, { useEffect, useState } from 'react'
+import { getAllEvents } from '../../lib/actions/event.actions'
+import { IoCalendar } from 'react-icons/io5'
+import { useUser } from '@clerk/nextjs'
+import { FaEdit } from 'react-icons/fa'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+function Collection ({ data, emptyMessage, collection_type }) {
+  function formatDateTime (isoDateTime) {
+    const dateTime = new Date(isoDateTime)
 
-    const card = () => {
-        return (
-            <>
-                <div className=' shadow-md overflow-y-hidden    lg:mx-6 mb-6 bg-gray-50 rounded-xl box-border  sm:mx-1 sm:grid-cols-1 md:mx-2' >
-                    <div className=''>
-                        <img src="./hero.jpg" alt="" className='rounded-t-xl'/>
-                    </div>
-                    <div className='  box-border font-sans px-4  '>
-                        <h1 className='font-extrabold pt-2 text-wrap text-[#f95a76] whitespace-pre-'>Yo Yo Honey Singh's Concert</h1>
-                        <p className='py-2 text-justify gap-0 text-[#181349] font-sans font-medium text-[14px]'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint ducimus voluptate modi sapiente, voluptas expedita eos necessitatibus</p>
-                    </div>
-                    <div className='flex justify-between items-center  pb-1 px-4'>
-                        <h2 className='font-extrabold font-sans text-gray-700'>
-                            Venue
-                        </h2>
-                        <p className='font-bold text-[11px] col-span-3   text-gray-700'>
-                            Gulshan Ground , Gandhi Nagar , Jammu
-                        </p>
-                    </div>
-                    <div className='flex justify-between items-center    text-gray-700 px-4'>
-                        <h2 className='font-extrabold font-sans  text-gray-700'>
-                            Date
-                        </h2>
-                        <p className='font-bold text-[11px] col-span-3   text-gray-700'>
-                            08-01-2024
-                        </p>
-                    </div>
-                    <div className='flex justify-between items-center   text-gray-700 px-4 pb-4'>
-                        <h2 className='font-extrabold font-sans  text-gray-700'>
-                            Timing
-                        </h2>
-                        <p className='font-bold text-[11px] col-span-3   text-gray-700'>
-                            16:00 P.M.
-                        </p>
-                    </div>
+    // Get date components
+    const year = dateTime.getFullYear()
+    const month = String(dateTime.getMonth() + 1).padStart(2, '0')
+    const day = String(dateTime.getDate()).padStart(2, '0')
 
-                </div>
+    // Get time components
+    const hours = String(dateTime.getHours()).padStart(2, '0')
+    const minutes = String(dateTime.getMinutes()).padStart(2, '0')
 
-            </>
-        )
-    }
-    return (
-        <>
-            <div className='grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 md:mx-2 lg:px-24 md:px-16 px-6 py-4 '>
+    // Get day name
+    const options = { weekday: 'long' }
+    const dayName = dateTime.toLocaleDateString(undefined, options)
 
-                {card()}
-                {card()}
-                {card()}
-                {card()}
-                {card()}
-                {card()}
-                {card()}
-                {card()}
-                {card()}
-                {card()}
-                {card()}
-                {card()}
+    // Get AM/PM
+    const ampm = dateTime.toLocaleTimeString([], { hour12: true }).slice(-2)
 
-            </div>
-        </>
-    )
+    // Create formatted date and time string
+    const date = `${dayName} , ${day}-${month}-${year}`
+    const time = `${hours}:${minutes} ${ampm}`
+
+    return { date, time }
+  }
+  const [cards, setCards] = useState([])
+  const { userId } = useUser()
+  const router = useRouter()
+  useEffect(() => {
+    getAllEvents().then(res => {
+      setCards(res)
+    })
+  }, [])
+
+  return (
+    <>
+      <div className='lg:px-32 md:px-16 grid lg:grid-cols-4  md:grid-cols-3  gap-y-4 gap-x-4 my-2 sm:grid-cols-2 grid-cols-1 px-4'>
+        {cards.length > 0 ? (
+          cards.map((item, index) => {
+            return (
+              <Card key={index} className='w-70'>
+                <CardHeader className='h-44 '>
+                  <img
+                    src={item.imageUrl}
+                    alt='profile-picture'
+                    className=' h-44 w-full object-cover rounded-t-lg'
+                    onClick={() => {
+                      router.push(`/events/${item._id}`)
+                    }}
+                  />
+                  <Link
+                    href={`/events/${item._id}/update`}
+                    className='absolute right-2 top-2 bg-gray-300/70 rounded-xl px-3'
+                  >
+                    {' '}
+                    {userId === item.organizer._id ? (
+                      <FaEdit className='h-8' />
+                    ) : null}
+                  </Link>
+                </CardHeader>
+                <CardBody>
+                  <div className='flex gap-x-2 py-2 items-center '>
+                    <p className='text-green-800 font-bold text-sm box-border py-1  bg-green-500/10 w-fit rounded-xl my-2 px-4'>
+                      $ {item.isFree ? 'Free' : item.price}
+                    </p>
+                    <p className='text-gray-800 font-semibold text-sm px-4 py-1  bg-gray-500/10 w-fit rounded-xl my-2'>
+                      {item?.category?.name}
+                    </p>
+                  </div>
+
+                  <div className='px-1 '>
+                    {/* start date time and end date time */}
+                    <p className='text-gray-800/70 font-semibold  text-xs  py-1 gap-x-4  leading-3  flex justify-around     w-fit rounded-xl '>
+                      <span> {formatDateTime(item?.startDateTime).date} </span>{' '}
+                      <span> {formatDateTime(item?.startDateTime).time}</span>
+                    </p>
+                    <Typography
+                      color='gray'
+                      className='font-medium capitalize  py-2'
+                      textGradient
+                    >
+                      {item.title}
+                    </Typography>
+                  </div>
+
+                  {/* Organizer and location */}
+                </CardBody>
+                <CardFooter>
+                  <Typography
+                    color='gray'
+                    className='font-medium text-xs text-gray-900/70'
+                    textGradient
+                  >
+                    {item.organizer.firstName} | {item.organizer.lastName}
+                  </Typography>
+                </CardFooter>
+              </Card>
+            )
+          })
+        ) : (
+          <div className='flex justify-center items-center'>
+            <Typography color='gray' className='font-medium' textGradient>
+              {emptyMessage}
+            </Typography>
+          </div>
+        )}
+      </div>
+    </>
+  )
 }
 
-export default Card
+export default Collection
