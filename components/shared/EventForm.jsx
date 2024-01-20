@@ -118,7 +118,7 @@ function EventForm ({ type, userId, event, eventId }) {
             imageUrl: uploadedImageUrl
           },
           userId,
-          path: '/profile'
+          path: `/events/${eventId}`
         })
         form.reset()
         toast.success('Event Successfully created !', {
@@ -148,7 +148,8 @@ function EventForm ({ type, userId, event, eventId }) {
           userId,
           path: `/events/${eventId}`
         })
-        console.log(updatedEvent)
+    
+        
         form.reset()
         toast.success('Event Successfully Updated !', {
           position: 'top-center',

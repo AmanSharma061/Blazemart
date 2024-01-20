@@ -11,7 +11,7 @@ import {
 import React, { useEffect, useState } from 'react'
 import { getAllEvents } from '../../lib/actions/event.actions'
 import { IoCalendar } from 'react-icons/io5'
-import { useUser } from '@clerk/nextjs'
+import { auth, useUser } from '@clerk/nextjs'
 import { FaEdit } from 'react-icons/fa'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -42,7 +42,8 @@ function Collection ({ data, emptyMessage, collection_type }) {
     return { date, time }
   }
   const [cards, setCards] = useState([])
-  const { userId } = useUser()
+  const { user } = useUser()
+  const userId = user?.publicMetadata?.userId
   const router = useRouter()
   useEffect(() => {
     getAllEvents().then(res => {
@@ -53,7 +54,7 @@ function Collection ({ data, emptyMessage, collection_type }) {
   return (
     <>
       <div className='lg:px-32 md:px-16 grid lg:grid-cols-4  md:grid-cols-3  gap-y-4 gap-x-4 my-2 sm:grid-cols-2 grid-cols-1 px-4'>
-        {cards.length > 0 ? (
+        {cards?.length > 0 ? (
           cards.map((item, index) => {
             return (
               <Card key={index} className='w-70'>
@@ -66,12 +67,14 @@ function Collection ({ data, emptyMessage, collection_type }) {
                       router.push(`/events/${item._id}`)
                     }}
                   />
+
                   <Link
                     href={`/events/${item._id}/update`}
                     className='absolute right-2 top-2 bg-gray-300/70 rounded-xl px-3'
                   >
                     {' '}
-                    {userId === item.organizer._id ? (
+                    {/* {console.log(item.organizer._id)} */}
+                    {userId === item.organizer._id.toString() ? (
                       <FaEdit className='h-8' />
                     ) : null}
                   </Link>

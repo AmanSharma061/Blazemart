@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react'
 
-import Card from '../../components/shared/Card'
+import Card from '../../components/shared/Collection'
 import {
   Select,
   SelectContent,
@@ -15,7 +15,7 @@ import {
 import { Input } from '../../components/ui/input'
 import { getCategories } from '../../lib/actions/category.actions'
 import Link from 'next/link'
-import Collection from '../../components/shared/Card'
+import Collection from '../../components/shared/Collection'
 // import connectToDatabase from '../../lib/database/connection'
 function page () {
   useEffect(() => {
