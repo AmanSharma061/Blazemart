@@ -73,14 +73,14 @@ function page () {
 
       {/* Search ane Category Filter */}
       <div className='  box-border lg:flex grid md:grid-cols-2  sm:grid-cols-1 lg:justify-between lg:px-28  w-full pt-4 gap-x-2 text-gray-500 space-y-2'>
-        <div className='lg:w-1/2 lg:pl-4 lg:pr-0  w-full  md:px-16 sm:px-16 md:py-2 px-6 pt-4 '>
+        <div className='lg:w-1/2 lg:pl-4 lg:pr-0  w-full  md:px-16 sm:px-6 md:py-2 px-6 pt-4 '>
           <Input
             type='text'
             placeholder='Search Events '
             className='w-full rounded-xl bg-gray-100 outline-none border-none'
           />
         </div>
-        <div className=' lg:w-1/2 box-border px-6'>
+        <div className=' lg:w-1/2 box-border px-6 '>
           <Select>
             <SelectTrigger className='w-full rounded-xl bg-gray-100 outline-none border-none '>
               <SelectValue placeholder='Category' />

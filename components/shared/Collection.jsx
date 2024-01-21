@@ -15,7 +15,14 @@ import { auth, useUser } from '@clerk/nextjs'
 import { FaEdit } from 'react-icons/fa'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-function Collection ({ data, emptyMessage, collection_type }) {
+import CARD from './Card'
+function Collection ({
+  data,
+  emptyMessage,
+  collection_type,
+  eventCategory,
+  eventId
+}) {
   function formatDateTime (isoDateTime) {
     const dateTime = new Date(isoDateTime)
 
@@ -50,74 +57,25 @@ function Collection ({ data, emptyMessage, collection_type }) {
       setCards(res)
     })
   }, [])
+  const relatedEvents = cards.filter(
+    item => item?.category._id === eventCategory?._id && item._id !== eventId
+  )
 
   return (
     <>
-      <div className='lg:px-32 md:px-16 grid lg:grid-cols-4  md:grid-cols-3  gap-y-4 gap-x-4 my-2 sm:grid-cols-2 grid-cols-1 px-4'>
-        {cards?.length > 0 ? (
-          cards.map((item, index) => {
-            return (
-              <Card key={index} className='w-70'>
-                <CardHeader className='h-44 '>
-                  <img
-                    src={item.imageUrl}
-                    alt='profile-picture'
-                    className=' h-44 w-full object-cover rounded-t-lg'
-                    onClick={() => {
-                      router.push(`/events/${item._id}`)
-                    }}
-                  />
-
-                  <Link
-                    href={`/events/${item._id}/update`}
-                    className='absolute right-2 top-2 bg-gray-300/70 rounded-xl px-3'
-                  >
-                    {' '}
-                    {/* {console.log(item.organizer._id)} */}
-                    {userId === item.organizer._id.toString() ? (
-                      <FaEdit className='h-8' />
-                    ) : null}
-                  </Link>
-                </CardHeader>
-                <CardBody>
-                  <div className='flex gap-x-2 py-2 items-center '>
-                    <p className='text-green-800 font-bold text-sm box-border py-1  bg-green-500/10 w-fit rounded-xl my-2 px-4'>
-                      $ {item.isFree ? 'Free' : item.price}
-                    </p>
-                    <p className='text-gray-800 font-semibold text-sm px-4 py-1  bg-gray-500/10 w-fit rounded-xl my-2'>
-                      {item?.category?.name}
-                    </p>
-                  </div>
-
-                  <div className='px-1 '>
-                    {/* start date time and end date time */}
-                    <p className='text-gray-800/70 font-semibold  text-xs  py-1 gap-x-4  leading-3  flex justify-around     w-fit rounded-xl '>
-                      <span> {formatDateTime(item?.startDateTime).date} </span>{' '}
-                      <span> {formatDateTime(item?.startDateTime).time}</span>
-                    </p>
-                    <Typography
-                      color='gray'
-                      className='font-medium capitalize  py-2'
-                      textGradient
-                    >
-                      {item.title}
-                    </Typography>
-                  </div>
-
-                  {/* Organizer and location */}
-                </CardBody>
-                <CardFooter>
-                  <Typography
-                    color='gray'
-                    className='font-medium text-xs text-gray-900/70'
-                    textGradient
-                  >
-                    {item.organizer.firstName} | {item.organizer.lastName}
-                  </Typography>
-                </CardFooter>
-              </Card>
-            )
-          })
+      <div className={`lg:px-32 md:px-16 grid  ${eventId?"lg:grid-cols-3":"lg:grid-cols-4"} md:grid-cols-2  gap-y-4 gap-x-4 my-2 sm:grid-cols-2 grid-cols-1 px-4`}>
+        {collection_type == 'All_Events' ? (
+          cards?.length > 0 ? (
+            <CARD data={cards} userId={userId} />
+          ) : (
+            <div className='flex justify-center items-center'>
+              <Typography color='gray' className='font-medium' textGradient>
+                {emptyMessage}
+              </Typography>
+            </div>
+          )
+        ) : relatedEvents.length > 0 ? (
+          <CARD data={relatedEvents} userId={userId} />
         ) : (
           <div className='flex justify-center items-center'>
             <Typography color='gray' className='font-medium' textGradient>

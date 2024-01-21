@@ -1,14 +1,14 @@
 import Header from '../../components/shared/Header'
 
 import Footer from '../../components/shared/Footer'
-import React from 'react'
+import React, { Suspense } from 'react'
 
-const layout = ({children}) => {
+const layout = ({ children }) => {
   return (
     <div className='w-full h-full'>
-        <Header/>
+      <Header />
       {children}
-      <Footer/>
+      <Footer />
     </div>
   )
 }

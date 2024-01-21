@@ -6,20 +6,31 @@ import { useParams } from 'next/navigation'
 import 'react-toastify/dist/ReactToastify.css'
 import {
   formatDateTime,
+  getAllEvents,
   getEventById
 } from '../../../../lib/actions/event.actions'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Typography } from '@material-tailwind/react'
+import Collection from '../../../../components/shared/Collection'
+import { get } from 'mongoose'
+import CheckOut from '../../../../components/shared/CheckOut'
+
 const page = () => {
   const params = useParams()
 
-  const [event, setUserData] = useState()
+  const [event, setEvent] = useState()
+  const [allEvents, setAllEvents] = useState([])
 
   useEffect(() => {
     getEventById(params.id).then(res => {
-      setUserData(res)
+      setEvent(res)
+    })
+    getAllEvents().then(res => {
+      setAllEvents(res)
     })
   }, [])
+
   function formatDateTime (isoDateTime) {
     const dateTime = new Date(isoDateTime)
 
@@ -48,15 +59,17 @@ const page = () => {
 
   return (
     <div className='w-full h-[100%] box-border py-3'>
-      <div className='lg:flex lg:ml-44 lg:my-24 items-center justify-center h-full lg:px-8'>
+      <div className='lg:mx-32 md:mx-10  md:py-8 lg:px-8 justify-center lg:flex-row flex-col md:flex-row  sm:flex  lg:py-4'>
         <Image
           src={event?.imageUrl}
           alt='hero image'
           width={1000}
-          height={1000}
-          className='h-full lg:w-[30%] object-cover object-center '
+          height={800}
+          className='h-full lg:py-2 lg:w-[55%] md:w-[60%] 
+           md:py-2 object-cover object-center sm:px-8 lg:px-16 my-4'
         />
-        <div className=' px-4  py-2 box-border'>
+
+        <div className=' px-4  py-2 box-border lg:my-4'>
           <h1 className='text-2xl text-red-500 capitalize font-bold px-4 py-2'>
             {event?.title}
           </h1>
@@ -103,15 +116,12 @@ const page = () => {
               <p className='text-gray-800 font-semibold  text-xs px-4 py-1 gap-x-4 space-x-4  flex    w-fit rounded-xl '>
                 {event?.location}
               </p>
-           
             </div>
-            <p className='text-gray-800 font-semibold  text-xs px-4 py-1 gap-x-4 space-x-4  flex    w-fit rounded-xl '>
-                 <Link href={'/'} className='text-white  bg-red-500 px-4 py-2  font-semibold  text-xs     flex    w-fit rounded-xl '>
-                  Get Ticket
-                </Link>
-              </p>
+            <div className='text-gray-800 font-semibold  text-xs px-4 py-1 gap-x-4 space-x-4  flex    w-fit rounded-xl '>
+             <CheckOut event={event} />
+            </div>
           </div>
-      
+
           <div className='px-4 py-4'>
             <h1 className='py-2 font-bold '>What You'll Learn</h1>
             <p className='text-gray-800 font-semibold  text-xs  py-1  flex    w-fit rounded-xl '>
@@ -127,6 +137,22 @@ const page = () => {
           </div>
         </div>
       </div>
+      <div className='lg:flex lg:mx-32  md:mx-16   h-full lg:px-8 px-8 mt-10 py lg:py-0 lg:mt-0 '>
+        <h1 class='mb-4 text-3xl font-extrabold text-gray-900/75 dark:text-white md:text-4xl lg:text-4xl'>
+          Related Events
+        </h1>
+      </div>
+
+      <div className='lg:mx-6 md:mx-4 '>
+        <Collection
+          collection_type='Related_Events'
+          errorMessage='No Related Events Found'
+          eventCategory={event?.category}
+          eventId={event?._id}
+        />
+      </div>
+
+      {/* Related Events Collection  using Material Tailwind*/}
     </div>
   )
 }

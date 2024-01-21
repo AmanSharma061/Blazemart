@@ -85,8 +85,8 @@ function EventForm ({ type, userId, event, eventId }) {
     resolver: zodResolver(formSchema),
     defaultValues:
       type === 'Update'
-        ? { ...event }
-        : { ...initialValues, categoryId: categories[0]?._id }
+        ? { ...event, startDateTime: new Date(event.startDateTime), endDateTime: new Date(event.endDateTime),categoryId:event.category._id}
+        : { ...initialValues }
   })
 
   const { startUpload } = useUploadThing('imageUploader')
