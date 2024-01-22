@@ -27,7 +27,7 @@ const GetTickt = ({ event,userId }) => {
     buyer_id:userId  
 
   }
-    await OrderCheckout(order)
+   const OrderDetails= await OrderCheckout(order);
   }
   return (
     <form action={onCheckOut} method='POST'>

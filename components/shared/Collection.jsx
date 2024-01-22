@@ -57,7 +57,7 @@ function Collection ({
       setCards(res)
     })
   }, [])
-  const relatedEvents = cards.filter(
+  const relatedEvents = cards?.filter(
     item => item?.category._id === eventCategory?._id && item._id !== eventId
   )
 
