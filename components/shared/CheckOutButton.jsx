@@ -50,7 +50,7 @@ const CheckOutButton = ({ event }) => {
         })
       })
 
-      const data = await response.json()
+      const data = await response?.json()
 
       var options = {
         key: 'rzp_test_05PzYBnGlFegWD',
