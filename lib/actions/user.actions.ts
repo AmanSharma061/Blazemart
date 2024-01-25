@@ -3,12 +3,13 @@
 import { revalidatePath } from 'next/cache'
 import connectToDatabase from '../../app/database/mongoDb/connectDB'
 import User from "../../app/database/models/usermodel"
-import Order from "../../app/database/models/oderModel"
+
 import Event from "../../app/database/models/eventModel"
 
 
 
 import { CreateUserParams, UpdateUserParams } from '../../types/index'
+import Ticket from '../../app/database/models/ticketModel'
 
 export async function createUser(user: CreateUserParams) {
   try {
@@ -66,7 +67,7 @@ export async function deleteUser(clerkId: string) {
       ),
 
       // Update the 'orders' collection to remove references to the user
-      Order.updateMany({ _id: { $in: userToDelete.orders } }, { $unset: { buyer: 1 } }),
+      Ticket.updateMany({ _id: { $in: userToDelete.orders } }, { $unset: { buyer: 1 } }),
     ])
 
     // Delete user
