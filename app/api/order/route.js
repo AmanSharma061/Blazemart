@@ -7,7 +7,7 @@ export async function GET(request) {
     await connectToDatabase();
     const data = await request.json();
     const { userId } = data;
-    console.log(userId,"jvbrikwbvguijkrbvgbrkjvg");
+    console.log(userId, "jvbrikwbvguijkrbvgbrkjvg");
 
     const tickets = await Ticket.find({ buyer: userId }).populate({
       path: "buyer",
@@ -20,6 +20,6 @@ export async function GET(request) {
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
+    return NextResponse.json({ error: "error", error: error });
   }
 }
