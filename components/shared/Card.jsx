@@ -7,10 +7,12 @@ import {
 } from '@material-tailwind/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FaEdit } from 'react-icons/fa'
+import { getOrganizerByEventId } from '../../lib/actions/event.actions'
 
-const CARD = ({ data, userId }) => {
+const CARD = ({ data, userId, organizer }) => {
+
   const router = useRouter()
   function formatDateTime (isoDateTime) {
     const dateTime = new Date(isoDateTime)
@@ -38,15 +40,15 @@ const CARD = ({ data, userId }) => {
     return { date, time }
   }
   return (
-<>
+    <>
       {data?.map((item, index) => {
         return (
-          <Card key={index} className='w-70'>
+          <Card key={index} className='w-70  pointer-events-auto z-10 flex'>
             <CardHeader className='h-44 '>
               <img
                 src={item.imageUrl}
                 alt='profile-picture'
-                className=' h-44 w-full object-cover rounded-t-lg -z-10'
+                className=' h-44 w-full object-cover rounded-t-lg '
                 onClick={() => {
                   router.push(`/events/${item._id}`)
                 }}
@@ -54,13 +56,14 @@ const CARD = ({ data, userId }) => {
 
               <Link
                 href={`/events/${item._id}/update`}
-                className='absolute right-2 top-2 bg-gray-300/70 rounded-xl px-3 z-20'
+                className='absolute right-2 top-2 bg-gray-300/70 rounded-xl px-3 '
               >
                 {' '}
-                {/* {console.log(item.organizer._id)} */}
-                {userId === item.organizer._id.toString() ? (
+                {userId == item?.organizer?._id?.toString() ? (
                   <FaEdit className='h-8 ' />
-                ) : null}
+                ) : (
+                  <></>
+                )}
               </Link>
             </CardHeader>
             <CardBody>
@@ -96,13 +99,27 @@ const CARD = ({ data, userId }) => {
                 className='font-medium text-xs text-gray-900/70'
                 textGradient
               >
-                {item.organizer.firstName} | {item.organizer.lastName}
+                {organizer?.map((item, index) => {
+                  return (
+                    <span key={index}>
+                      {item?._id === userId ? (
+                        <span>
+                          {item?.firstName} | {item?.lastName}
+                        </span>
+                      ) : (
+                        <></>
+                      )}
+                    </span>
+                  )
+                })}
+                {item?.organizer?.firstName} | {item?.organizer?.lastName}
               </Typography>
+              {/* Details Page Navigation Link */}
             </CardFooter>
           </Card>
         )
       })}
-   </> 
+    </>
   )
 }
 

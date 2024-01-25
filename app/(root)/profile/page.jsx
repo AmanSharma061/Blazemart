@@ -1,26 +1,53 @@
 'use client'
 import Link from 'next/link'
-import { MdAdd } from 'react-icons/md'
+import { MdAdd, MdOutlineRotate90DegreesCw } from 'react-icons/md'
 import React, { useEffect } from 'react'
 import { useUser } from '@clerk/nextjs'
 import {
   getAllEvents,
-  getEventsByOrganizer
+  getEventsByOrganizer,
+  getAllTickets,
+  getOrganizerByEventId,
+  getEventById,
+  eventFinder
 } from '../../../lib/actions/event.actions'
 import CARD from '../../../components/shared/Card'
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Typography
+} from '@material-tailwind/react'
+import { formatDateTime } from '../../../lib/utils'
+
 const page = () => {
   const { user } = useUser()
   const userId = user?.publicMetadata.userId
+  console .log(userId, 'userId')
   const [events, setEvents] = React.useState([])
+  const [tickets, setTickets] = React.useState([])
   const getter = async () => {
     const events = await getAllEvents()
     setEvents(events)
-    console.log(events)
+  }
+
+  const orderFetcher = async () => {
+    const tickets = await getAllTickets()
+   
+    setTickets(tickets)
   }
   useEffect(() => {
     getter()
-  }, [])
-  const createdEvents = events.filter(event => event.organizer._id === userId)
+    orderFetcher()
+  }, [userId])
+
+  const createdEvents = events?.filter(event => event.organizer._id === userId)
+
+  const OrderEvent = tickets
+    ?.filter(ticket => ticket?.buyer._id === userId)
+    .map(ticket => ticket.event)
+
 
   return (
     <>
@@ -28,14 +55,59 @@ const page = () => {
         <h1 class='mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-4xl dark:text-white'>
           Your Tickets
         </h1>
-        {/* Explore more Events */}
+
         <Link href='/'>
           <p className='bg-[#5d34ff] px-4 lg:py-3 lg:px-6 py-2 md:rounded-2xl  sm:rounded-2xl lg:rounded-full rounded-lg text-gray-100 lg:text-xs lg:font-semibold md:text-base text-sm '>
             Explore more Events
           </p>
         </Link>
       </div>
+      <div className='grid lg:grid-cols-2 xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 grid-cols-1 sm:mx-8 mx-8 lg:mx-32 my-4 md:mx-16 gap-x-4 gap-y-4'>
+        {OrderEvent?.length > 0 ? (
+          OrderEvent?.map((item, index) => (
+            <Card key={index} className='w-70  pointer-events-auto z-10'>
+              <CardHeader className='h-44 '>
+                <img
+                  src={item.imageUrl}
+                  alt='profile-picture'
+                  className='h-44 w-full object-cover rounded-t-lg'
+                  onClick={() => {
+                    router.push(`/events/${item._id}`)
+                  }}
+                />
+              </CardHeader>
+              <CardBody>
+                <div className='flex  gap-y-2  gap-x-4 items-center py-2'>
+                  <p className='text-green-800 font-bold text-sm bg-green-500/10 rounded-xl px-4'>
+                    {item.isFree ? 'Free' : `$${item.price}`}
+                  </p>
+                  <p className='text-gray-800/70 font-semibold text-xs py-1'>
+                    {formatDateTime(item?.startDateTime).date} |{' '}
+                    {formatDateTime(item?.startDateTime).time}
+                  </p>
+                </div>
 
+                <div className='px-2'>
+                  <Typography
+                    color='gray'
+                    className='font-medium capitalize py-2'
+                    textGradient
+                  >
+                    {item.title}
+                  </Typography>
+                </div>
+              </CardBody>
+            </Card>
+          ))
+        ) : (
+          <h1 className='text-center text-2xl font-semibold text-gray-500 flex flex-col lg:flex-row gap-y-4'>
+            <span>No Events Created Yet</span>
+            <span className='bg-[#5d34ff] px-4 lg:py-3 lg:px-6 py-2 md:rounded-2xl  sm:rounded-2xl lg:rounded-full rounded-full text-gray-100 lg:text-xs lg:font-semibold md:text-base text-sm sm:text-xs'>
+              Create New Event
+            </span>
+          </h1>
+        )}
+      </div>
       <div className='lg:mx-32 lg:px-16  sm:px-16 px-16  bg-gray-100 lg:py-8 flex items-center justify-between py-4'>
         <h1 class=' lg:text-4xl font-extrabold leading-none tracking-tight text-gray-700 md:text-3xl md:px-14 sm:text-xl text-xl  dark:text-white'>
           Events Organized
@@ -50,7 +122,7 @@ const page = () => {
         </Link>
       </div>
       <div className='grid lg:grid-cols-2 xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 grid-cols-1 sm:mx-8 mx-8 lg:mx-32 my-4 md:mx-16 gap-x-4 gap-y-4'>
-        {createdEvents.length > 0 ? (
+        {createdEvents?.length > 0 ? (
           <CARD data={createdEvents} userId={userId} />
         ) : (
           <h1 className='text-center text-2xl font-semibold text-gray-500 flex flex-col lg:flex-row gap-y-4'>

@@ -14,7 +14,7 @@ import Link from 'next/link'
 import { Typography } from '@material-tailwind/react'
 import Collection from '../../../../components/shared/Collection'
 import { get } from 'mongoose'
-import CheckOut from '../../../../components/shared/CheckOut'
+import CheckOutButton from '../../../../components/shared/CheckOutButton'
 
 const page = () => {
   const params = useParams()
@@ -117,8 +117,8 @@ const page = () => {
                 {event?.location}
               </p>
             </div>
-            <div className='text-gray-800 font-semibold  text-xs px-4 py-1 gap-x-4 space-x-4  flex    w-fit rounded-xl '>
-             <CheckOut event={event} />
+            <div className='text-gray-800 font-semibold  text-xs px-4 py-1 gap-x-4 space-x-4  flex    w-fit rounded-xl  '>
+              <CheckOutButton event={event} />
             </div>
           </div>
 

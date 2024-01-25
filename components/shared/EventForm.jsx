@@ -81,7 +81,7 @@ function EventForm ({ type, userId, event, eventId }) {
     categoryId: '',
     isFree: false
   }
-  const form = useForm({
+  const form = useForm({ 
     resolver: zodResolver(formSchema),
     defaultValues:
       type === 'Update'

@@ -12,7 +12,7 @@ function Header () {
   }
 
   return (
-    <div className='sticky top-0 shadow-[20px]'>
+    <div className='sticky top-0 shadow-[20px] z-50'>
       <header className='bg-gray-50 text-black px-4 py-2 lg:py-3 flex flex-wrap justify-between items-center shadow-sm '>
         {/* Logo */}
         <div className='flex items-center md:px-16 lg:pl-32 '>
@@ -95,9 +95,9 @@ function Header () {
             </button>
 
             {/* Mobile Navigation */}
-            <nav className='flex  items-center justify-center  w-full h-full  z-10 '>
+            <nav className='flex  items-center justify-center  w-full h-full  z-50 bg-white'>
               {/* Add your mobile navigation items here */}
-              <div className='flex flex-col items-center text-2xl  font-mono font-bold text-gray-700'>
+              <div className='flex flex-col items-start text-2xl  font-mono font-bold text-gray-700 z-40 '>
                 <Link href='/' className='my-2' onClick={toggleMobileMenu}>
                   Home
                 </Link>

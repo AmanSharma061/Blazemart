@@ -5,12 +5,19 @@ export default authMiddleware({
   '/api/webhook/clerk',
   '/api/webhook/stripe',
   '/api/uploadthing',
+  "/api/razorpay",
+  '/api/checkout',
   '/events/:id',
+  '/api/category',
+  '/api/freeTicket',
+  '/api/order'
+  
 ],
 ignoredRoutes: [
   '/api/webhook/clerk',
   '/api/webhook/stripe',
-  '/api/uploadthing'
+  '/api/uploadthing',
+  '/api/razorpay',
 ]
 })
 

@@ -63,7 +63,11 @@ function Collection ({
 
   return (
     <>
-      <div className={`lg:px-32 md:px-16 grid  ${eventId?"lg:grid-cols-3":"lg:grid-cols-4"} md:grid-cols-2  gap-y-4 gap-x-4 my-2 sm:grid-cols-2 grid-cols-1 px-4`}>
+      <div
+        className={`lg:px-32 md:px-16 grid  ${
+          eventId ? 'lg:grid-cols-3' : 'lg:grid-cols-4'
+        } md:grid-cols-2  gap-y-4 gap-x-4 my-2 sm:grid-cols-2 grid-cols-1 px-4 `}
+      >
         {collection_type == 'All_Events' ? (
           cards?.length > 0 ? (
             <CARD data={cards} userId={userId} />
@@ -74,7 +78,7 @@ function Collection ({
               </Typography>
             </div>
           )
-        ) : relatedEvents.length > 0 ? (
+        ) : relatedEvents?.length > 0 ? (
           <CARD data={relatedEvents} userId={userId} />
         ) : (
           <div className='flex justify-center items-center'>
