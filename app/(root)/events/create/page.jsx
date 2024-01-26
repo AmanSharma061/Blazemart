@@ -9,8 +9,8 @@ function page () {
  console.log(userId)
   return (
     <>
-      <div className='w-full h-32 flex items-center justify-center bg-gray-100 '>
-        <h1 id='create' className='font-bold text-gray-700  text-3xl'>
+      <div className='w-full h-32 lg:h-64 flex items-center justify-center bg-gray-100 '>
+        <h1 id='create' className='font-bold text-gray-700  text-3xl lg:text-5xl'>
           Create Event
         </h1>
       </div>

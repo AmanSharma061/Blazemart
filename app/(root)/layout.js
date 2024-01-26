@@ -5,7 +5,7 @@ import React, { Suspense } from 'react'
 
 const layout = ({ children }) => {
   return (
-    <div className='w-full h-full'>
+    <div className='w-full h-[100%] relative '>
       <Header />
       {children}
       <Footer />

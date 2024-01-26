@@ -81,11 +81,16 @@ function EventForm ({ type, userId, event, eventId }) {
     categoryId: '',
     isFree: false
   }
-  const form = useForm({ 
+  const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues:
       type === 'Update'
-        ? { ...event, startDateTime: new Date(event.startDateTime), endDateTime: new Date(event.endDateTime),categoryId:event.category._id}
+        ? {
+            ...event,
+            startDateTime: new Date(event.startDateTime),
+            endDateTime: new Date(event.endDateTime),
+            categoryId: event.category._id
+          }
         : { ...initialValues }
   })
 
@@ -148,8 +153,7 @@ function EventForm ({ type, userId, event, eventId }) {
           userId,
           path: `/events/${eventId}`
         })
-    
-        
+
         form.reset()
         toast.success('Event Successfully Updated !', {
           position: 'top-center',
@@ -181,12 +185,13 @@ function EventForm ({ type, userId, event, eventId }) {
     fetchCategories()
   }, [handleAddCategory])
   return (
-    <div className='w-full lg:px-56 py-2 box-border  md:lg-44 sm:px-38'>
+    <div className='grid grid-cols-1  lg:px-56 gap-y-2 md:px-16 sm:px-8  px-4 mb-[8%]' >
+      <Form {...form} >
       <ToastContainer />
-      <Form {...form}>
         <form
+
           onSubmit={form.handleSubmit(onSubmit)}
-          className=' grid lg:grid-cols-2 gap-x-4 pr-4 pl-2 gap-y-2'
+          className='grid  lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 grid-cols-1  gap-2 py-4'
         >
           <FormField
             control={form.control}

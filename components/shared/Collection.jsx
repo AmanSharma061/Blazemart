@@ -12,8 +12,7 @@ import React, { useEffect, useState } from 'react'
 import { getAllEvents } from '../../lib/actions/event.actions'
 import { IoCalendar } from 'react-icons/io5'
 import { auth, useUser } from '@clerk/nextjs'
-import { FaEdit } from 'react-icons/fa'
-import Link from 'next/link'
+import { ThreeDots } from 'react-loader-spinner'
 import { useRouter } from 'next/navigation'
 import CARD from './Card'
 function Collection ({
@@ -51,9 +50,11 @@ function Collection ({
   const [cards, setCards] = useState([])
   const { user } = useUser()
   const userId = user?.publicMetadata?.userId
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
   useEffect(() => {
     getAllEvents().then(res => {
+      setLoading(false)
       setCards(res)
     })
   }, [])
@@ -64,30 +65,52 @@ function Collection ({
   return (
     <>
       <div
-        className={`lg:px-32 md:px-16 grid  ${
-          eventId ? 'lg:grid-cols-3' : 'lg:grid-cols-4'
-        } md:grid-cols-2  gap-y-4 gap-x-4 my-2 sm:grid-cols-2 grid-cols-1 px-4 `}
-      >
-        {collection_type == 'All_Events' ? (
-          cards?.length > 0 ? (
-            <CARD data={cards} userId={userId} />
-          ) : (
-            <div className='flex justify-center items-center'>
-              <Typography color='gray' className='font-medium' textGradient>
-                {emptyMessage}
-              </Typography>
-            </div>
-          )
-        ) : relatedEvents?.length > 0 ? (
-          <CARD data={relatedEvents} userId={userId} />
+          className={`lg:px-32 md:px-16 grid  ${
+            eventId ? 'lg:grid-cols-3' : 'lg:grid-cols-3'
+          } md:grid-cols-2  xl:grid-cols-3 2xl:grid-cols-4 gap-y-4 gap-x-4 my-2 sm:grid-cols-2 grid-cols-1 px-4 `}
+        >
+        {!loading ? (
+          <>
+            {collection_type == 'All_Events' ? (
+              cards?.length > 0 ? (
+                <CARD data={cards} userId={userId} />
+              ) : (
+                <div className='flex justify-center items-center'>
+                  <Typography color='gray' className='font-medium' textGradient>
+                    {emptyMessage}
+                  </Typography>
+                </div>
+              )
+            ) : relatedEvents?.length > 0 ? (
+              <CARD data={relatedEvents} userId={userId} />
+            ) : (
+              <div className='flex justify-center items-center'>
+                <Typography color='gray' className='font-medium' textGradient>
+                  {emptyMessage}
+                </Typography>
+              </div>
+            )}
+ 
+          </>
         ) : (
-          <div className='flex justify-center items-center'>
-            <Typography color='gray' className='font-medium' textGradient>
-              {emptyMessage}
-            </Typography>
-          </div>
-        )}
+          <>
+      <div className='w-full flex justify-center relative left-[150%] px-28'> 
+        
+      <ThreeDots
+              visible={true}
+              height='80'
+              width='80'
+              color='text-blue-700'
+              radius='9'
+              ariaLabel='three-dots-loading'
+              wrapperStyle={{}}
+              wrapperClass=''
+            />
       </div>
+      
+          </>
+        )}
+        </div>
     </>
   )
 }

@@ -95,7 +95,7 @@ function Header () {
             </button>
 
             {/* Mobile Navigation */}
-            <nav className='flex  items-center justify-center  w-full h-full  z-50 bg-white'>
+            <nav className='flex  items-center justify-center  w-full h-full  z-50 bg-red-500'>
               {/* Add your mobile navigation items here */}
               <div className='flex flex-col items-start text-2xl  font-mono font-bold text-gray-700 z-40 '>
                 <Link href='/' className='my-2' onClick={toggleMobileMenu}>

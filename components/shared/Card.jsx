@@ -68,12 +68,12 @@ const CARD = ({ data, userId, organizer }) => {
             </CardHeader>
             <CardBody>
               <div className='flex gap-x-2 py-2 items-center '>
-                <p className='text-green-800 font-bold text-sm box-border py-1  bg-green-500/10 w-fit rounded-xl my-2 px-4'>
+                <p className='text-green-800 font-bold text-sm box-border py-1  bg-green-500/10 w-fit rounded-xl my-2 px-4  text-ellipsis overflow-hidden whitespace-nowrap'>
                   $ {item.isFree ? 'Free' : item.price}
                 </p>
-                <p className='text-gray-800 font-semibold text-sm px-4 py-1  bg-gray-500/10 w-fit rounded-xl my-2'>
+                <p className='text-gray-800 font-semibold text-sm px-4 py-1  bg-gray-500/10 w-fit rounded-xl my-2 text-ellipsis overflow-hidden whitespace-nowrap'>
                   {item?.category?.name}
-                </p>
+                </p> 
               </div>
 
               <div className='px-1 '>
