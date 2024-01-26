@@ -60,6 +60,7 @@ Follow these steps to set up and run BlazeMart locally:
    ```bash
    cd BlazeMart
    npm install
+   npm run dev
 
    ```
 3. The application will be available at http://localhost:3000.
