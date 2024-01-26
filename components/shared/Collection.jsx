@@ -20,7 +20,9 @@ function Collection ({
   emptyMessage,
   collection_type,
   eventCategory,
-  eventId
+  eventId,
+  query,
+  filterCategory
 }) {
   function formatDateTime (isoDateTime) {
     const dateTime = new Date(isoDateTime)
@@ -58,22 +60,39 @@ function Collection ({
       setCards(res)
     })
   }, [])
+  cards?.forEach(item => {
+    item.title = item.title.toLowerCase()
+    item.description = item.description.toLowerCase()
+  })
   const relatedEvents = cards?.filter(
     item => item?.category._id === eventCategory?._id && item._id !== eventId
   )
+  const newCards = cards.filter(item => {
+    if (filterCategory != 'All') {
+      return (
+        (item?.title.indexOf(query) >= 0 || item?.category?.name.indexOf(query)>=0)  &&
+        item?.category?.name.indexOf(filterCategory) >= 0
+      )
+    }else{
+      return item?.title.indexOf(query) >= 0
+    }
+  
+  })
 
   return (
     <>
       <div
-          className={`lg:px-32 md:px-16 grid  ${
-            eventId ? 'lg:grid-cols-3' : 'lg:grid-cols-3'
-          } md:grid-cols-2  xl:grid-cols-3 2xl:grid-cols-4 gap-y-4 gap-x-4 my-2 sm:grid-cols-2 grid-cols-1 px-4 `}
-        >
+        className={`lg:px-32 md:px-16 grid  ${
+          eventId ? 'lg:grid-cols-3' : 'lg:grid-cols-3'
+        } md:grid-cols-2  xl:grid-cols-3 2xl:grid-cols-4 gap-y-4 gap-x-4 my-2 sm:grid-cols-2 grid-cols-1 px-4 ${
+          loading ? 'py-56' : 'h-[auto]'
+        } `}
+      >
         {!loading ? (
           <>
             {collection_type == 'All_Events' ? (
               cards?.length > 0 ? (
-                <CARD data={cards} userId={userId} />
+                <CARD data={newCards} userId={userId} />
               ) : (
                 <div className='flex justify-center items-center'>
                   <Typography color='gray' className='font-medium' textGradient>
@@ -90,27 +109,24 @@ function Collection ({
                 </Typography>
               </div>
             )}
- 
           </>
         ) : (
           <>
-      <div className='w-full flex justify-center relative left-[150%] px-28'> 
-        
-      <ThreeDots
-              visible={true}
-              height='80'
-              width='80'
-              color='text-blue-700'
-              radius='9'
-              ariaLabel='three-dots-loading'
-              wrapperStyle={{}}
-              wrapperClass=''
-            />
-      </div>
-      
+            <div className='w-full flex justify-center relative lg:left-[150%] px-26 '>
+              <ThreeDots
+                visible={true}
+                height='80'
+                width='80'
+                color='text-blue-700'
+                radius='9'
+                ariaLabel='three-dots-loading'
+                wrapperStyle={{}}
+                wrapperClass=''
+              />
+            </div>
           </>
         )}
-        </div>
+      </div>
     </>
   )
 }

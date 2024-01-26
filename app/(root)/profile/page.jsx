@@ -18,7 +18,7 @@ const page = () => {
   const router = useRouter()
   const { user } = useUser()
   const userId = user?.publicMetadata.userId
-  console.log(userId, 'userId')
+
   const [events, setEvents] = React.useState([])
   const [tickets, setTickets] = React.useState([])
   const getter = async () => {

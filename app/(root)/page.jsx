@@ -23,6 +23,8 @@ function page () {
       setCategories(res)
     })
   }, [])
+  const [query, setQuery] = React.useState('')
+  const [filterCategory, setFilterCategory] = React.useState('')
 
   const [categories, setCategories] = React.useState([])
   const handler = () => {
@@ -71,25 +73,27 @@ function page () {
         Events
       </h1>
 
-      {/* Search ane Category Filter */}
-      <div className='  box-border lg:flex grid md:grid-cols-2  sm:grid-cols-1 lg:justify-between lg:px-28  w-full pt-4 gap-x-2 text-gray-500 space-y-2'>
+      <div className='  box-border lg:flex grid md:grid-cols-2  sm:grid-cols-1 lg:justify-between lg:px-28  w-full pt-4 gap-x-2 text-gray-500 space-y-2 my-6'>
         <div className='lg:w-1/2 lg:pl-4 lg:pr-0  w-full  md:px-16 sm:px-6 md:py-2 px-6 pt-4 '>
           <Input
             type='text'
             placeholder='Search Events '
+            value={query}
+            onChange={e => setQuery(e.target.value)}
             className='w-full rounded-xl bg-gray-100 outline-none border-none'
           />
         </div>
         <div className=' lg:w-1/2 box-border px-6 '>
-          <Select>
+          <Select onValueChange={setFilterCategory} value={filterCategory}>
             <SelectTrigger className='w-full rounded-xl bg-gray-100 outline-none border-none '>
               <SelectValue placeholder='Category' />
             </SelectTrigger>
             <SelectContent>
-              <SelectGroup>
+              <SelectGroup key={1} title='Categories' className='w-full'>
                 <SelectLabel>Categories</SelectLabel>
+                <SelectItem value='All'>All</SelectItem>
                 {categories?.map(category => (
-                  <SelectItem key={category.id} value={category.name}>
+                  <SelectItem key={category.name} value={category.name}>
                     {category.name}
                   </SelectItem>
                 ))}
@@ -101,6 +105,8 @@ function page () {
 
       <Collection
         data={[]}
+        query={query}
+        filterCategory={filterCategory}
         emptyMessage='No Events Found'
         collection_type='All_Events'
       />

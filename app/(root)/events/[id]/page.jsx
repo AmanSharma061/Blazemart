@@ -12,9 +12,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import Collection from '../../../../components/shared/Collection'
-
+import 'react-toastify/dist/ReactToastify.css';
 import CheckOutButton from '../../../../components/shared/CheckOutButton'
-import { Loader, Loader2 } from 'lucide-react'
+
+import { ToastContainer } from 'react-toastify'
 
 const page = () => {
   const params = useParams()
@@ -76,6 +77,7 @@ const page = () => {
         </div>
       ) : (
         <div className='w-full h-[100%] box-border py-3'>
+          <ToastContainer/>
           <div className='lg:mx-32 md:mx-10  md:py-8 lg:px-8 justify-center lg:flex-row flex-col md:flex-row  sm:flex  lg:py-4'>
             <Image
               src={event?.imageUrl}

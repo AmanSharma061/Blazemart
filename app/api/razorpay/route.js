@@ -28,10 +28,10 @@ export async function POST(request) {
 
   try {
     const response = await razorpay.orders.create(options);
-    console.log(response);
+
     return NextResponse.json({ message: "Order created", response: response });
   } catch (err) {
-    console.log(err);
+
     return NextResponse.status(500).json({
       message: "Internal server error",
       error: err.message,

@@ -28,7 +28,7 @@ function Header () {
 
         {/* Navigation - Hidden on Mobile */}
         <SignedIn>
-          <nav className='hidden lg:flex      '>
+          <nav className='hidden lg:flex    font-Play  '>
             {/* Add your navigation items here */}
             <Link href='/' className='mx-4'>
               Home
@@ -95,28 +95,52 @@ function Header () {
             </button>
 
             {/* Mobile Navigation */}
-            <nav className='flex  items-center justify-center  w-full h-full  z-50 bg-red-500'>
+            <nav className='flex  items-center justify-center  w-full h-full  z-50 navv'>
               {/* Add your mobile navigation items here */}
-              <div className='flex flex-col items-start text-2xl  font-mono font-bold text-gray-700 z-40 '>
-                <Link href='/' className='my-2' onClick={toggleMobileMenu}>
+              <style jsx>{`
+                @keyframes fadeIn {
+                  0% {
+                    opacity: 0;
+                  }
+                  50% {
+                    opacity: 50;
+                  }
+                  75%{
+                    opacity:75;
+                  }
+                  100% {
+                    opacity: 100;
+                  }
+                }
+
+                .nav-item {
+                  animation: fadeIn 0.5s ease-in-out forwards;
+                }
+              `}</style>
+              <div className='flex flex-col items-start text-2xl font-Play font-bold text-gray-700 z-40'>
+                <Link
+                  href='/'
+                  className='my-2 nav-item'
+                  onClick={toggleMobileMenu}
+                >
                   Home
                 </Link>
                 <Link
                   href='/profile'
-                  className='my-2'
+                  className='my-2 nav-item'
                   onClick={toggleMobileMenu}
                 >
                   Profile
                 </Link>
                 <Link
                   href='/events/create'
-                  className='my-2'
+                  className='my-2 nav-item'
                   onClick={toggleMobileMenu}
                 >
                   Create Event
                 </Link>
                 <SignedOut>
-                  <Link href='/sign-in' className='my-2'>
+                  <Link href='/sign-in' className='my-2 nav-item'>
                     Log in
                   </Link>
                 </SignedOut>

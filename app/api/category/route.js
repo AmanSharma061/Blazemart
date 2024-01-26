@@ -6,7 +6,7 @@ export async function POST (request) {
   try {
     await connectToDatabase()
     const getData = await request.json()
-    console.log(getData)
+  
     await Category.create(getData)
     return NextResponse.json(
       { message: 'Ho Gya Save' },

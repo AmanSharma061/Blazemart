@@ -3,8 +3,10 @@ import { SignedIn, SignedOut } from '@clerk/nextjs'
 import Link from 'next/link'
 import React from 'react'
 import { useUser } from '@clerk/nextjs'
+import 'react-toastify/dist/ReactToastify.css';
 
 import { useRouter } from 'next/navigation'
+import { ToastContainer, toast } from 'react-toastify'
 
 const CheckOutButton = ({ event }) => {
   const { user } = useUser()
@@ -28,9 +30,18 @@ const CheckOutButton = ({ event }) => {
       })
       const data = await (res ? res.json() : null)
       if (data.message) {
-        alert('Ticket Booked Successfully')
-
-        router.push('/profile')
+        toast.success('Ticket Booked Successfully', {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true
+        })
+        const waiting = setTimeout(() => {
+          router.push('/profile')
+        }, 800)
+        return () => clearTimeout(waiting)
       } else {
         return alert('Ticket Booking Failed')
       }
@@ -80,13 +91,30 @@ const CheckOutButton = ({ event }) => {
               orderId: this.order_id
             })
           })
-          const res =await data.json()
+          const res = await data.json()
 
           if (res.message) {
-            alert('Payment Successful')
-            router.push('/profile')
+            toast.success('Payment Successful', {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true
+            })
+            const waiting = setTimeout(() => {
+              router.push('/profile')
+            }, 800)
+            return () => clearTimeout(waiting)
           } else {
-            return alert('Payment Failed')
+            return toast.error('Payment Failed', {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true
+            })
           }
         },
         UserDetails: {
@@ -104,6 +132,7 @@ const CheckOutButton = ({ event }) => {
 
   return (
     <div>
+      <ToastContainer />
       <SignedOut>
         <Link
           href='/sign-in'

@@ -73,7 +73,7 @@ const CARD = ({ data, userId, organizer }) => {
                 </p>
                 <p className='text-gray-800 font-semibold text-sm px-4 py-1  bg-gray-500/10 w-fit rounded-xl my-2 text-ellipsis overflow-hidden whitespace-nowrap'>
                   {item?.category?.name}
-                </p> 
+                </p>
               </div>
 
               <div className='px-1 '>

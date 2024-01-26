@@ -6,7 +6,7 @@ import { useAuth } from '@clerk/nextjs'
 
 function page () {
   const { userId } = useAuth()
- console.log(userId)
+
   return (
     <>
       <div className='w-full h-32 lg:h-64 flex items-center justify-center bg-gray-100 '>

@@ -6,7 +6,7 @@ export async function POST(request) {
   try {
     await connectToDatabase();
     const data = await request.json();
-    console.log(data, "data");
+
 
     const order = await Ticket.create({
       buyer: data.userId,
