@@ -5,8 +5,8 @@ export async function POST(request) {
   const data = await request.json();
 
   const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY,
-    key_secret: process.env.RAZORPAY_SECRET,
+    key_id: "rzp_test_05PzYBnGlFegWD",
+    key_secret: "o2i24QtKki3xOp5zu9z4xn6r",
   });
 
   // Create an order -> generate the OrderID -> Send it to the Front-end
@@ -32,6 +32,9 @@ export async function POST(request) {
     return NextResponse.json({ message: "Order created", response: response });
   } catch (err) {
     console.log(err);
-    return NextResponse.status(500).json({ message: "Internal server error", error: err.message });
+    return NextResponse.status(500).json({
+      message: "Internal server error",
+      error: err.message,
+    });
   }
 }
