@@ -80,7 +80,7 @@ const CheckOutButton = ({ event }) => {
               orderId: this.order_id
             })
           })
-          const res = await (data ? data.json() : null)
+          const res =await data.json()
 
           if (res.message) {
             alert('Payment Successful')
