@@ -29,7 +29,7 @@ const CheckOutButton = ({ event }) => {
       const data = await (res ? res.json() : null)
       if (data.message) {
         alert('Ticket Booked Successfully')
-  
+
         router.push('/profile')
       } else {
         return alert('Ticket Booking Failed')
@@ -50,13 +50,13 @@ const CheckOutButton = ({ event }) => {
         })
       })
 
-      const data = await response?.json()
+      const data = await (response ? response.json() : null)
 
       var options = {
         key: 'rzp_test_05PzYBnGlFegWD',
         name: event?.title,
-        currency: data.response.currency,
-        amount: data.response.amount,
+        currency: data?.response.currency,
+        amount: data?.response.amount,
         order_id: data.response.id,
         buyerId: UserId,
 
@@ -71,9 +71,9 @@ const CheckOutButton = ({ event }) => {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
+              razorpay_payment_id: response?.razorpay_payment_id,
+              razorpay_order_id: response?.razorpay_order_id,
+              razorpay_signature: response?.razorpay_signature,
               eventId: event?._id,
               buyerId: UserId,
               amount: event?.isFree ? 0 : event?.price * 100,

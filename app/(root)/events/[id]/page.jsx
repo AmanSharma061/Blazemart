@@ -63,16 +63,16 @@ const page = () => {
     <>
       {loading ? (
         <div className='flex justify-center items-center h-screen w-full'>
-           <ThreeDots
-              visible={true}
-              height='80'
-              width='80'
-              color='rgb(239 68 68 / var(--tw-text-opacity))'
-              radius='9'
-              ariaLabel='three-dots-loading'
-              wrapperStyle={{}}
-              wrapperClass=''
-            />
+          <ThreeDots
+            visible={true}
+            height='80'
+            width='80'
+            color='rgb(239 68 68 / var(--tw-text-opacity))'
+            radius='9'
+            ariaLabel='three-dots-loading'
+            wrapperStyle={{}}
+            wrapperClass=''
+          />
         </div>
       ) : (
         <div className='w-full h-[100%] box-border py-3'>
