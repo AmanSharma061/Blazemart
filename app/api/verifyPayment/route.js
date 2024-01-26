@@ -17,7 +17,7 @@ export async function POST(request) {
 
   const body = razorpay_order_id + "|" + razorpay_payment_id;
   const expectedSignature = crypto
-    .createHmac("sha256", process.env.RAZORPAY_SECRET)
+    .createHmac("sha256", 'o2i24QtKki3xOp5zu9z4xn6r')
     .update(body.toString())
     .digest("hex");
 
