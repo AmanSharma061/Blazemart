@@ -84,7 +84,7 @@ const CARD = ({ data, userId, organizer }) => {
                 </p>
                 <Typography
                   color='gray'
-                  className='font-medium capitalize  py-2'
+                  className='text-lg capitalize font-bold py-2'
                   textGradient
                 >
                   {item.title}

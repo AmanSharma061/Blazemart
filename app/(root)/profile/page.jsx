@@ -44,16 +44,18 @@ const page = () => {
 
   return (
     <>
-      <div className='lg:mx-32 px-14 my-4 py-8 bg-gray-100 lg:py-8 flex items-center justify-between gap-x-1 '>
-        <h1 class='mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-4xl dark:text-white'>
-          Your Tickets
-        </h1>
+      <div className='lg:mx-32 px-10  py-8 bg-gray-100 lg:py-8 flex items-center justify-between gap-x-1 '>
+        <div className='flex  gap-x-4 w-full justify-between '>
+          <h1 class='mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-4xl dark:text-white'>
+            Your Tickets
+          </h1>
 
-        <Link href='/'>
-          <p className='bg-[#5d34ff] px-4 lg:py-3 lg:px-6 py-2 md:rounded-2xl   sm:rounded-2xl lg:rounded-full rounded-full text-gray-100 lg:text-xs lg:font-semibold md:text-sm text-xs '>
-            Explore more Events
-          </p>
-        </Link>
+          <Link href='/'>
+            <p className='bg-[#5d34ff] px-4 lg:py-3 lg:px-6 py-2 md:rounded-2xl   sm:rounded-2xl lg:rounded-full rounded-full text-gray-100 lg:text-xs lg:font-semibold md:text-sm text-xs '>
+              Explore more Events
+            </p>
+          </Link>
+        </div>
       </div>
       <div className='grid lg:grid-cols-2 xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 grid-cols-1 sm:mx-8 mx-8 lg:mx-32 my-4 md:mx-16 gap-x-4 gap-y-4'>
         {OrderEvent?.length > 0 ? (
@@ -98,19 +100,21 @@ const page = () => {
           </h1>
         )}
       </div>
-      <div className='lg:mx-32 lg:px-16  sm:px-16 px-16  bg-gray-100 lg:py-8 flex items-center justify-between py-4'>
-        <h1 class=' text-2xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-4xl dark:text-white'>
-          Events Organized
-        </h1>
-        {/* Explore more Events */}
+      <div className='lg:mx-32 px-10 my-4 py-8 bg-gray-100 lg:py-8 flex items-center justify-between gap-x-1 '>
+        <div className='flex  gap-x-4 w-full justify-between  '>
+          <h1 class='mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-4xl dark:text-white'>
+            Events Organized
+          </h1>
 
-        <Link href='/events/create'>
-          <p className='bg-[#5d34ff] px-4 lg:py-3 lg:px-6 py-2 md:rounded-2xl  sm:rounded-2xl lg:rounded-full rounded-full text-gray-100 lg:text-xs lg:font-semibold  text-sm sm:text-xs hidden lg:block md:block md:text-xs '>
-            Create New Event
-          </p>
-          <MdAdd className='text-4xl text-gray-100 bg-[#5d34ff] px-2 py-2 rounded-full lg:hidden md:hidden' />
-        </Link>
+          <Link href='/events/create'>
+            <p className='bg-[#5d34ff] px-4 lg:py-3 lg:px-6 py-2 md:rounded-2xl  sm:rounded-2xl lg:rounded-full rounded-full text-gray-100 lg:text-xs lg:font-semibold  text-sm sm:text-xs hidden lg:block md:block md:text-xs '>
+              Create New Event
+            </p>
+            <MdAdd className='text-4xl text-gray-100 bg-[#5d34ff] px-2 py-2 rounded-full lg:hidden md:hidden' />
+          </Link>
+        </div>
       </div>
+
       <div className='grid lg:grid-cols-4 xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 grid-cols-1 sm:mx-8 mx-8 lg:mx-32 my-4 md:mx-16 gap-x-4 gap-y-4'>
         {createdEvents?.length > 0 ? (
           <CARD data={createdEvents} userId={userId} />
